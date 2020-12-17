@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 function App() {
   const figuresList = {
@@ -19,16 +19,44 @@ function App() {
     },
   };
 
+  const [canvasCoordinates, setCanvasCoordinates] = useState();
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const newCanvasCoordinates = ref.current.getBoundingClientRect();
+    setCanvasCoordinates(newCanvasCoordinates);
+    //console.log("fieldCanvas", ref.current.getBoundingClientRect());
+  }, []);
+
   const [figures, setFigures] = useState([]);
 
   const getStyleForFigure = (dataFigure, index) => {
-    const { pageX, pageY, type } = dataFigure;
-    console.log("pagex", pageY);
+    let { pageX, pageY, type } = dataFigure;
+
+    //console.log("pagex", pageX);
     const figure = figuresList[type];
-    console.log("figure", figure);
+    //console.log("a", pageX + figure.width);
+    //console.log("b", canvasCoordinates.x + canvasCoordinates.width);
+    if (pageX < canvasCoordinates.x) pageX = canvasCoordinates.x;
+    if (pageY < canvasCoordinates.y) {
+      pageY = canvasCoordinates.y;
+      //console.log("newpageY", pageY);
+    }
+
+    if (pageX + figure.width > canvasCoordinates.x + canvasCoordinates.width) {
+      pageX = canvasCoordinates.x + canvasCoordinates.width - figure.width;
+      //console.log("new pageX", pageX);
+    }
+    if (
+      pageY + figure.height >
+      canvasCoordinates.y + canvasCoordinates.height
+    ) {
+      pageY = canvasCoordinates.y + canvasCoordinates.height - figure.height;
+    }
+    //console.log("figure", figure);
     return {
-      width: figure.width + 'px',
-      height: figure.height + 'px',
+      width: figure.width + "px",
+      height: figure.height + "px",
       border: figure.border,
       backgroundColor: figure.color,
       borderRadius: figure.borderRadius,
@@ -39,6 +67,7 @@ function App() {
     };
   };
 
+  
   const dragStartHandler = (e, typeFigure) => {
     e.dataTransfer.setData("type", typeFigure);
     console.log("drag", typeFigure);
@@ -50,22 +79,18 @@ function App() {
 
   const dragDropHandler = (e) => {
     const type = e.dataTransfer.getData("type");
-    const figure = figuresList[type]
+    const figure = figuresList[type];
     const pageX = e.pageX;
     const pageY = e.pageY;
-    console.log("width", e);
+    //console.log("width", e);
     const dataFigure = {
-      pageX: pageX - (figure.width / 2), //
-      pageY: pageY - (figure.height / 2),// 
+      pageX: pageX, //- (figure.width / 2)
+      pageY: pageY, //  - (figure.height / 2)
       type: type,
     };
     setFigures([...figures, dataFigure]);
-    console.log("type", figures);
+    //console.log("type", figures);
   };
-
-  // const dragLeavetHandler = (e) => {
-
-  // }
 
   return (
     <div className="App">
@@ -89,6 +114,7 @@ function App() {
 
         <div
           className="canvas"
+          ref={ref}
           onDragOver={(e) => dragOverHandler(e)}
           onDrop={(e) => dragDropHandler(e)}
         ></div>
