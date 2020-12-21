@@ -1,8 +1,8 @@
 import "./App.css";
 import React, { useState } from "react";
-import { FiguresField } from "./components/figuresLayout/FiguresLayout";
-import { CanvasField } from "./components/canvasLayout/CanvasLayout";
-import { ImportExport } from "./components/jsonLoader/JsonLoader";
+import { FiguresLayout } from "./components/figuresLayout/FiguresLayout";
+import { CanvasLayout } from "./components/canvasLayout/CanvasLayout";
+import { JsonLoader } from "./components/jsonLoader/JsonLoader";
 
 function App() {
   const [selectedFigure, setSelectedFigure] = useState();
@@ -20,10 +20,10 @@ function App() {
 
   return (
     <div className="container">
-      <ImportExport figures={figures} setFigures={setFigures} />
+      <JsonLoader figures={figures} setFigures={setFigures} />
       <div className="App">
-        <FiguresField dragStartHandler={dragStartHandler} />
-        <CanvasField
+        <FiguresLayout dragStartHandler={dragStartHandler} />
+        <CanvasLayout
           selectedFigure={selectedFigure}
           setSelectedFigure={setSelectedFigure}
           figures={figures}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./style.css";
 
-export const CanvasField = (props) => {
+export const CanvasLayout = (props) => {
   const {
     selectedFigure,
     setSelectedFigure,
@@ -31,14 +31,15 @@ export const CanvasField = (props) => {
   const [zIndex, setZIndex] = useState(0);
   const [canvasCoordinates, setCanvasCoordinates] = useState();
 
-  const ref = useRef(null);
+  const canvasLayoutRef = useRef(null);
+
   useEffect(() => {
-    const newCanvasCoordinates = ref.current.getBoundingClientRect();
+    const newCanvasCoordinates = canvasLayoutRef.current.getBoundingClientRect();
     setCanvasCoordinates(newCanvasCoordinates);
     setFigures(JSON.parse(localStorage.getItem("figures")));
     setIdFigure(JSON.parse(localStorage.getItem("idFigure")));
     setZIndex(JSON.parse(localStorage.getItem("zIndex")));
-  }, []);
+  }, [setCanvasCoordinates, setFigures, setIdFigure, setZIndex]);
 
   useEffect(() => {
     localStorage.setItem("figures", JSON.stringify(figures));
@@ -48,21 +49,18 @@ export const CanvasField = (props) => {
 
   const getStyleForFigure = (dataFigure, index) => {
     let { pageX, pageY, type, zIndex } = dataFigure;
+    const { x, y, height, width } = canvasCoordinates;
     const figure = figuresList[type];
 
-    if (pageX < canvasCoordinates.x) pageX = canvasCoordinates.x;
-    if (pageY < canvasCoordinates.y) {
-      pageY = canvasCoordinates.y;
+    if (pageX < x) pageX = x;
+    if (pageY < y) {
+      pageY = y;
     }
-    if (pageX + figure.width > canvasCoordinates.x + canvasCoordinates.width) {
-      pageX = canvasCoordinates.x + canvasCoordinates.width - figure.width;
+    if (pageX + figure.width > x + width) {
+      pageX = x + width - figure.width;
     }
-    if (
-      pageY + figure.height >
-      canvasCoordinates.y + canvasCoordinates.height
-    ) {
-      pageY =
-        canvasCoordinates.y + canvasCoordinates.height - figure.height - 1;
+    if (pageY + figure.height > y + height) {
+      pageY = y + height - figure.height - 1;
     }
     let border = figure.border;
     if (selectedFigure) {
@@ -115,9 +113,6 @@ export const CanvasField = (props) => {
     setIdFigure(idFigure + 1);
     setZIndex(zIndex + 1);
     setSelectedFigure(null);
-    localStorage.setItem("figures", JSON.stringify(figures));
-    localStorage.setItem("idFigure", JSON.stringify(idFigure));
-    localStorage.setItem("zIndex", JSON.stringify(zIndex));
   };
 
   const clickHandler = (e, figure) => {
@@ -144,7 +139,7 @@ export const CanvasField = (props) => {
         }
       }
     },
-    [selectedFigure, figures]
+    [selectedFigure, figures, setFigures]
   );
 
   return (
@@ -154,7 +149,7 @@ export const CanvasField = (props) => {
 
         <div
           className="canvas"
-          ref={ref}
+          ref={canvasLayoutRef}
           onDragOver={dragOverHandler}
           onDrop={dragDropHandler}
           onDragLeave={dragLeaveHandler}
@@ -170,7 +165,7 @@ export const CanvasField = (props) => {
             style={getStyleForFigure(figure, index)}
             onDragStart={(e) => dragStartHandler(e, figure.type, figure)}
             onClick={(e) => clickHandler(e, figure)}
-            onKeyDown={(e) => deleteFigure(e)}
+            onKeyDown={deleteFigure}
             tabIndex="0"
             draggable
           ></div>

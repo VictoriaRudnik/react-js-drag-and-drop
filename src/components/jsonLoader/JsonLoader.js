@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-export const ImportExport = (props) => {
+export const JsonLoader = (props) => {
   const { figures, setFigures } = props;
 
   const hiddenFileInput = React.useRef(null);

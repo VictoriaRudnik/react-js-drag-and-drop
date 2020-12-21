@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-export const FiguresField = (props) => {
+export const FiguresLayout = (props) => {
   const { dragStartHandler } = props;
   return (
     <div className="figures_container">
