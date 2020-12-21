@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./style.css";
 
 export const CanvasField = (props) => {
-  const { selectedFigure, setSelectedFigure, figures, setFigures } = props;
+  const {
+    selectedFigure,
+    setSelectedFigure,
+    figures,
+    setFigures,
+    dragStartHandler,
+  } = props;
 
   const figuresList = {
     circle: {
@@ -21,7 +27,6 @@ export const CanvasField = (props) => {
     },
   };
 
-  //const [figures, setFigures] = useState([]);
   const [idFigure, setIdFigure] = useState(0);
   const [zIndex, setZIndex] = useState(0);
   const [canvasCoordinates, setCanvasCoordinates] = useState();
@@ -78,22 +83,11 @@ export const CanvasField = (props) => {
     };
   };
 
-  const dragStartHandler = (e, typeFigure, idFigure, figure) => {
-    e.dataTransfer.setData("type", typeFigure);
-    e.dataTransfer.setData("figure", figure);
-    if (idFigure !== undefined) {
-      e.dataTransfer.setData("id", idFigure);
-      e.target.style.border = "3px solid grey";
-    }
-    setSelectedFigure(figure);
-  };
-
   const dragOverHandler = (e) => {
     e.preventDefault();
   };
 
   const dragLeaveHandler = (e) => {
-    console.log("leave");
     deleteFigure(e);
   };
 
@@ -118,12 +112,12 @@ export const CanvasField = (props) => {
       });
     }
     setFigures([...figures, dataFigure]);
-    localStorage.setItem("figures", JSON.stringify(figures));
     setIdFigure(idFigure + 1);
-    localStorage.setItem("idFigure", JSON.stringify(idFigure));
     setZIndex(zIndex + 1);
-    localStorage.setItem("zIndex", JSON.stringify(zIndex));
     setSelectedFigure(null);
+    localStorage.setItem("figures", JSON.stringify(figures));
+    localStorage.setItem("idFigure", JSON.stringify(idFigure));
+    localStorage.setItem("zIndex", JSON.stringify(zIndex));
   };
 
   const clickHandler = (e, figure) => {
@@ -161,22 +155,20 @@ export const CanvasField = (props) => {
         <div
           className="canvas"
           ref={ref}
-          onDragOver={(e) => dragOverHandler(e)}
-          onDrop={(e) => dragDropHandler(e)}
-          onDragLeave={(e) => dragLeaveHandler(e)}
+          onDragOver={dragOverHandler}
+          onDrop={dragDropHandler}
+          onDragLeave={dragLeaveHandler}
         ></div>
       </div>
       {figures.map((figure, index) => {
         return (
           <div
             className="figure"
-            onDragOver={(e) => dragOverHandler(e)}
-            onDrop={(e) => dragDropHandler(e)}
+            onDragOver={dragOverHandler}
+            onDrop={dragDropHandler}
             key={index}
             style={getStyleForFigure(figure, index)}
-            onDragStart={(e) =>
-              dragStartHandler(e, figure.type, figure.id, figure)
-            }
+            onDragStart={(e) => dragStartHandler(e, figure.type, figure)}
             onClick={(e) => clickHandler(e, figure)}
             onKeyDown={(e) => deleteFigure(e)}
             tabIndex="0"

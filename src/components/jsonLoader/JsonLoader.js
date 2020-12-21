@@ -5,11 +5,11 @@ export const ImportExport = (props) => {
   const { figures, setFigures } = props;
 
   const hiddenFileInput = React.useRef(null);
-  const handleClick = (event) => {
+  const handleClick = () => {
     hiddenFileInput.current.click();
   };
 
-  const clickHandler = (e) => {
+  const handleChange = (e) => {
     if (e.target.files.length > 0) {
       const fileReader = new FileReader();
       fileReader.readAsText(e.target.files[0], "UTF-8");
@@ -41,7 +41,7 @@ export const ImportExport = (props) => {
         accept=".json"
         className="input_import"
         ref={hiddenFileInput}
-        onChange={clickHandler}
+        onChange={handleChange}
       ></input>
       <button className="button" onClick={downloadFile}>
         Export

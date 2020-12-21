@@ -1,8 +1,8 @@
 import "./App.css";
 import React, { useState } from "react";
-import { FiguresField } from "./components/figuresField/FiguresField";
-import { CanvasField } from "./components/canvasField/CanvasField";
-import { ImportExport } from "./components/importExportFile/ImportExport";
+import { FiguresField } from "./components/figuresLayout/FiguresLayout";
+import { CanvasField } from "./components/canvasLayout/CanvasLayout";
+import { ImportExport } from "./components/jsonLoader/JsonLoader";
 
 function App() {
   const [selectedFigure, setSelectedFigure] = useState();
@@ -14,9 +14,8 @@ function App() {
     if (figure !== undefined) {
       e.dataTransfer.setData("id", figure.id);
       e.target.style.border = "3px solid grey";
-    }
-    console.log("figure  sel", figure);
-    setSelectedFigure(null);
+      setSelectedFigure(figure);
+    } else setSelectedFigure(null);
   };
 
   return (
@@ -29,6 +28,7 @@ function App() {
           setSelectedFigure={setSelectedFigure}
           figures={figures}
           setFigures={setFigures}
+          dragStartHandler={dragStartHandler}
         />
       </div>
     </div>
