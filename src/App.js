@@ -1,10 +1,12 @@
 import "./App.css";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState } from "react";
 import { FiguresField } from "./components/FiguresField";
 import { CanvasField } from "./components/CanvasField";
+import {ImportExport} from "./components/ImportExport"
 
 function App() {
   const [selectedFigure, setSelectedFigure] = useState();
+  const [figures, setFigures] = useState([]);
 
   const dragStartHandler = (e, typeFigure, figure) => {
     e.dataTransfer.setData("type", typeFigure);
@@ -18,12 +20,21 @@ function App() {
   };
 
   return (
+    <div className="container">
+      <ImportExport figures = {figures}
+        setFigures = {setFigures}/>
     <div className="App">
+      
       <FiguresField dragStartHandler={dragStartHandler} />
       <CanvasField
         selectedFigure={selectedFigure}
         setSelectedFigure={setSelectedFigure}
+        figures = {figures}
+        setFigures = {setFigures}
       />
+      
+      
+    </div>
     </div>
   );
 }
