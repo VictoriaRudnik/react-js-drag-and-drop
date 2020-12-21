@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { dragStartHandler } from "./service";
+import "./style.css";
 
 export const CanvasField = (props) => {
   const { selectedFigure, setSelectedFigure, figures, setFigures } = props;
@@ -35,7 +35,7 @@ export const CanvasField = (props) => {
     setZIndex(JSON.parse(localStorage.getItem("zIndex")));
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     localStorage.setItem("figures", JSON.stringify(figures));
     localStorage.setItem("idFigure", JSON.stringify(idFigure));
     localStorage.setItem("zIndex", JSON.stringify(zIndex));
@@ -105,8 +105,8 @@ export const CanvasField = (props) => {
 
     const dataFigure = {
       id: idFigure,
-      pageX: pageX - figure.width / 3, 
-      pageY: pageY - figure.height / 3, 
+      pageX: pageX - figure.width / 3,
+      pageY: pageY - figure.height / 3,
       type: type,
       zIndex: zIndex,
     };
@@ -129,10 +129,10 @@ export const CanvasField = (props) => {
   const clickHandler = (e, figure) => {
     e.target.style.zIndex = zIndex;
     figures.forEach((item) => {
-        if(item === figure){
-          item.zIndex = zIndex
-        }
-    })
+      if (item === figure) {
+        item.zIndex = zIndex;
+      }
+    });
     setZIndex(zIndex + 1);
     localStorage.setItem("zIndex", JSON.stringify(zIndex));
     setSelectedFigure(figure);

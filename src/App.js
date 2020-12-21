@@ -1,8 +1,8 @@
 import "./App.css";
 import React, { useState } from "react";
-import { FiguresField } from "./components/FiguresField";
-import { CanvasField } from "./components/CanvasField";
-import {ImportExport} from "./components/ImportExport"
+import { FiguresField } from "./components/figuresField/FiguresField";
+import { CanvasField } from "./components/canvasField/CanvasField";
+import { ImportExport } from "./components/importExportFile/ImportExport";
 
 function App() {
   const [selectedFigure, setSelectedFigure] = useState();
@@ -21,20 +21,16 @@ function App() {
 
   return (
     <div className="container">
-      <ImportExport figures = {figures}
-        setFigures = {setFigures}/>
-    <div className="App">
-      
-      <FiguresField dragStartHandler={dragStartHandler} />
-      <CanvasField
-        selectedFigure={selectedFigure}
-        setSelectedFigure={setSelectedFigure}
-        figures = {figures}
-        setFigures = {setFigures}
-      />
-      
-      
-    </div>
+      <ImportExport figures={figures} setFigures={setFigures} />
+      <div className="App">
+        <FiguresField dragStartHandler={dragStartHandler} />
+        <CanvasField
+          selectedFigure={selectedFigure}
+          setSelectedFigure={setSelectedFigure}
+          figures={figures}
+          setFigures={setFigures}
+        />
+      </div>
     </div>
   );
 }

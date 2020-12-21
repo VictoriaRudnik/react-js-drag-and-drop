@@ -1,12 +1,13 @@
-import React, { useRef } from "react";
+import React from "react";
+import "./style.css";
 
 export const ImportExport = (props) => {
   const { figures, setFigures } = props;
 
   const hiddenFileInput = React.useRef(null);
-  // const handleClick = (event) => {
-  //   (hiddenFileInput.current).click();
-  // };
+  const handleClick = (event) => {
+    hiddenFileInput.current.click();
+  };
 
   const clickHandler = (e) => {
     if (e.target.files.length > 0) {
@@ -19,7 +20,7 @@ export const ImportExport = (props) => {
   };
 
   const downloadFile = async () => {
-    const fileName = "file";
+    const fileName = "canvasFigures";
     const json = JSON.stringify(figures);
     const blob = new Blob([json], { type: "application/json" });
     const href = await URL.createObjectURL(blob);
@@ -32,15 +33,18 @@ export const ImportExport = (props) => {
   };
   return (
     <div className="import_container">
-      <button className="button">Import</button>
+      <button className="button" onClick={handleClick}>
+        Import
+      </button>
       <input
         type="file"
         accept=".json"
+        className="input_import"
         ref={hiddenFileInput}
         onChange={clickHandler}
       ></input>
       <button className="button" onClick={downloadFile}>
-        export
+        Export
       </button>
     </div>
   );

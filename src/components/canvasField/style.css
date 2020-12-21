@@ -1,0 +1,9 @@
+.canvas_container {
+  border: 1px solid black;
+  width: 60%;
+  height: 80%;
+}
+
+.canvas {
+  height: 92%;
+}

@@ -1,0 +1,29 @@
+.figures_container {
+  border: 1px solid black;
+  width: 20%;
+  height: 80%;
+}
+
+.figures {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 92%;
+}
+
+.circle {
+  border: 1px solid black;
+  background-color: red;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-top: 40px;
+}
+
+.rectangle {
+  border: 1px solid black;
+  background-color: blueviolet;
+  width: 90px;
+  height: 50px;
+  margin-top: 40px;
+}
