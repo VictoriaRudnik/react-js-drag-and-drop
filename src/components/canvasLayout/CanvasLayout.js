@@ -36,9 +36,12 @@ export const CanvasLayout = (props) => {
   useEffect(() => {
     const newCanvasCoordinates = canvasLayoutRef.current.getBoundingClientRect();
     setCanvasCoordinates(newCanvasCoordinates);
-    setFigures(JSON.parse(localStorage.getItem("figures")));
-    setIdFigure(JSON.parse(localStorage.getItem("idFigure")));
-    setZIndex(JSON.parse(localStorage.getItem("zIndex")));
+    const figures = JSON.parse(localStorage.getItem("figures"));
+    !!figures && setFigures(figures);
+    const idFigure = JSON.parse(localStorage.getItem("idFigure"));
+    !!idFigure && setIdFigure(idFigure);
+    const zIndex = JSON.parse(localStorage.getItem("zIndex"));
+    !!zIndex && setZIndex(zIndex);
   }, [setCanvasCoordinates, setFigures, setIdFigure, setZIndex]);
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export const CanvasLayout = (props) => {
     localStorage.setItem("zIndex", JSON.stringify(zIndex));
   }, [figures, idFigure, zIndex]);
 
-  const getStyleForFigure = (dataFigure, index) => {
+  const getStyleForFigure = (dataFigure) => {
     let { pageX, pageY, type, zIndex } = dataFigure;
     const { x, y, height, width } = canvasCoordinates;
     const figure = figuresList[type];
@@ -162,7 +165,7 @@ export const CanvasLayout = (props) => {
             onDragOver={dragOverHandler}
             onDrop={dragDropHandler}
             key={index}
-            style={getStyleForFigure(figure, index)}
+            style={getStyleForFigure(figure)}
             onDragStart={(e) => dragStartHandler(e, figure.type, figure)}
             onClick={(e) => clickHandler(e, figure)}
             onKeyDown={deleteFigure}
